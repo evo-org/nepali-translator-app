@@ -1,11 +1,34 @@
+import { useCallback } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
+import * as SplashScreen from 'expo-splash-screen';
+import { useFonts, Roboto_400Regular } from '@expo-google-fonts/roboto';
 
 import TranslationView from './src/views/TranslationView';
 
 export default function App() {
+  let [fontsLoaded] = useFonts({
+    Roboto_400Regular,
+  });
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
-    <View style={styles.container}>
+    <View
+      style={styles.container}
+      onLayout={onLayoutRootView}
+    >
+      {/* <Text style={{ fontFamily: 'Roboto_300Light', fontSize: 40 }}>
+        Inter Black
+      </Text> */}
       <TranslationView />
       <StatusBar style="auto" />
     </View>
@@ -15,8 +38,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#F4F9FC',
   },
 });

@@ -1,39 +1,52 @@
 import { useState } from 'react';
-import { StyleSheet, View, FlatList, Button } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, View, Keyboard } from 'react-native';
 
 import TranslationDirection from '../components/TranslationDirection';
 import TranslationInput from '../components/TranslationInput';
 import TranslationOutput from '../components/TranslationOutput';
+import SubmitTranslation from '../components/SubmitTranslation';
+import SupportedLanguage from '../constants/SupportedLanguage';
 
 export default function TranslationView() {
-  // const [courseGoals, setCourseGoals] = useState([]);
+  const [inputLanguage, setInputLanguage] = useState(SupportedLanguage.English);
+  const [outputLanguage, setOutputLanguage] = useState(
+    SupportedLanguage.Nepali
+  );
 
-  // function startAddGoalHandler() {
-  //   setModalIsVisible(true);
-  // }
+  const [translationInput, setTranslationInput] = useState('');
+  const [translationOutput, setTranslationOutput] = useState('');
 
-  // function endAddGoalHandler() {
-  //   setModalIsVisible(false);
-  // }
+  function languageSwitchHandler() {
+    if (inputLanguage === SupportedLanguage.English) {
+      setInputLanguage(SupportedLanguage.Nepali);
+      setOutputLanguage(SupportedLanguage.English);
+    } else {
+      setInputLanguage(SupportedLanguage.English);
+      setOutputLanguage(SupportedLanguage.Nepali);
+    }
+  }
 
-  // function addGoalHandler(enteredGoalText) {
-  //   setCourseGoals((currentCourseGoals) => [
-  //     ...currentCourseGoals,
-  //     { text: enteredGoalText, id: Math.random().toString() },
-  //   ]);
-  //   endAddGoalHandler();
-  // }
+  function translationHandler() {
+    Keyboard.dismiss();
+    setTranslationOutput('Generating translation ...');
 
-  // function deleteGoalHandler(id) {
-  //   setCourseGoals((currentCourseGoals) => {
-  //     return currentCourseGoals.filter((goal) => goal.id !== id);
-  //   });
-  // }
+    console.log('Translating ...');
+    console.log(translationInput);
+
+    // Actual translation
+    // setTranslationOutput('asd');
+  }
 
   return (
     <View style={styles.appContainer}>
-      <TranslationDirection />
+      <TranslationDirection
+        inputLanguage={inputLanguage}
+        outputLanguage={outputLanguage}
+        onLanguageSwitch={languageSwitchHandler}
+      />
+      <TranslationInput input={setTranslationInput} />
+      <TranslationOutput translation={translationOutput} />
+      <SubmitTranslation onTranslate={translationHandler} />
     </View>
   );
 }
@@ -42,6 +55,7 @@ const styles = StyleSheet.create({
   appContainer: {
     flex: 1,
     paddingTop: 50,
+    paddingBottom: 50,
     paddingHorizontal: 16,
   },
   goalsContainer: {
