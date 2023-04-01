@@ -26,9 +26,6 @@ export default function App() {
       style={styles.container}
       onLayout={onLayoutRootView}
     >
-      {/* <Text style={{ fontFamily: 'Roboto_300Light', fontSize: 40 }}>
-        Inter Black
-      </Text> */}
       <TranslationView />
       <StatusBar style="auto" />
     </View>
@@ -38,6 +35,5 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F4F9FC',
   },
 });

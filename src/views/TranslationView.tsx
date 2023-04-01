@@ -1,11 +1,20 @@
 import { useState } from 'react';
-import { StyleSheet, View, Keyboard } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Keyboard,
+  Appearance,
+  ColorSchemeName,
+  useColorScheme,
+} from 'react-native';
 
 import TranslationDirection from '../components/TranslationDirection';
 import TranslationInput from '../components/TranslationInput';
 import TranslationOutput from '../components/TranslationOutput';
 import SubmitTranslation from '../components/SubmitTranslation';
 import SupportedLanguage from '../constants/SupportedLanguage';
+import DarkMode from '../components/DarkMode';
+import { isInDarkMode } from '../utils/Visual';
 
 export default function TranslationView() {
   const [inputLanguage, setInputLanguage] = useState(SupportedLanguage.English);
@@ -15,6 +24,10 @@ export default function TranslationView() {
 
   const [translationInput, setTranslationInput] = useState('');
   const [translationOutput, setTranslationOutput] = useState('');
+
+  const colorScheme = useColorScheme();
+  console.log(colorScheme);
+  const [darkMode, setDarkMode] = useState(colorScheme);
 
   function languageSwitchHandler() {
     if (inputLanguage === SupportedLanguage.English) {
@@ -38,27 +51,39 @@ export default function TranslationView() {
   }
 
   return (
-    <View style={styles.appContainer}>
+    <View style={styles(darkMode).appContainer}>
+      <DarkMode
+        darkMode={darkMode}
+        onChange={setDarkMode}
+      />
       <TranslationDirection
         inputLanguage={inputLanguage}
         outputLanguage={outputLanguage}
         onLanguageSwitch={languageSwitchHandler}
       />
-      <TranslationInput input={setTranslationInput} />
-      <TranslationOutput translation={translationOutput} />
+      <TranslationInput
+        darkMode={darkMode}
+        input={setTranslationInput}
+      />
+      <TranslationOutput
+        darkMode={darkMode}
+        translation={translationOutput}
+      />
       <SubmitTranslation onTranslate={translationHandler} />
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  appContainer: {
-    flex: 1,
-    paddingTop: 50,
-    paddingBottom: 50,
-    paddingHorizontal: 16,
-  },
-  goalsContainer: {
-    flex: 5,
-  },
-});
+const styles = (darkMode: ColorSchemeName) =>
+  StyleSheet.create({
+    appContainer: {
+      backgroundColor: isInDarkMode(darkMode) ? '#1C1C1E' : '#F4F9FC',
+      flex: 1,
+      paddingTop: 50,
+      paddingBottom: 50,
+      paddingHorizontal: 16,
+    },
+    goalsContainer: {
+      flex: 5,
+    },
+  });

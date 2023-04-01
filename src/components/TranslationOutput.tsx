@@ -1,12 +1,10 @@
-import { useState } from 'react';
-import { StyleSheet, Text, Button, View, Pressable } from 'react-native';
+import { StyleSheet, Text, View, ColorSchemeName } from 'react-native';
+import { isInDarkMode } from '../utils/Visual';
 
-var showComponent: 'none' | 'flex' = 'none';
-
-export default function TranslationOutput(props: { translation: string }) {
-  const [inputLanguage, setInputLanguage] = useState('English');
-  const [outputLanguage, setOutputLanguage] = useState('Nepali');
-
+export default function TranslationOutput(props: {
+  translation: string;
+  darkMode: ColorSchemeName;
+}) {
   return (
     <View style={styles(props).container}>
       <Text
@@ -18,7 +16,7 @@ export default function TranslationOutput(props: { translation: string }) {
     </View>
   );
 }
-const styles = (props: { translation: string }) =>
+const styles = (props: { translation: string; darkMode: ColorSchemeName }) =>
   StyleSheet.create({
     container: {
       display: props.translation ? 'flex' : 'none',
@@ -36,7 +34,7 @@ const styles = (props: { translation: string }) =>
       textAlignVertical: 'top',
       borderWidth: 1,
       borderColor: '#1C7293',
-      color: '#4A4A4A',
+      color: isInDarkMode(props.darkMode) ? '#F4F9FC' : '#4A4A4A',
       fontFamily: 'Roboto_400Regular',
     },
   });
